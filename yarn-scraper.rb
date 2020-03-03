@@ -21,18 +21,26 @@ def scraper
       name: product.css("div.category-item-name").text.gsub(/\n/, "").strip,
       image_url: "https://www.knitpicks.com" + product.css("div.category-item-thumbnail>a").attribute('href').value.gsub(/\n/, "").strip,
       price_weight: product.css("div.category-item-pricing").text.gsub(/\n/, "").strip,
-      desc_fibre: product.css("div.category-item-yarndetails").text.gsub(/\n/, "").strip
+      weight: product.css("div.category-item-pricing").text.gsub(/\n/, "").strip.split.last(2).join(" "),
+      price: product.css("div.category-item-pricing").text.gsub(/\n/, "").strip.split.slice(0..-1).join(" "),
+      desc_fibre: product.css("div.category-item-yarndetails").text.gsub(/\n/, "").strip,
+
     }
+
     skeins << skein
     puts "Added #{skein[:name]}"
     puts " "
     
+    byebug
   end
-  byebug
+  
+  
 end
 
 scraper
  
+
+
 
   # skein = doc.css("div.category-item")
 
