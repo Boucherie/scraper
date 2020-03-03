@@ -1,6 +1,8 @@
 require 'nokogiri'
 require 'httparty'
 require 'byebug'
+require 'csv'
+
 
 
 def scraper
@@ -24,52 +26,28 @@ def scraper
       weight: product.css("div.category-item-pricing").text.gsub(/\n/, "").strip.split.last(2).join(" "),
       price: product.css("div.category-item-pricing").text.gsub(/\n/, "").strip.split.slice(0..-1).join(" "),
       desc_fibre: product.css("div.category-item-yarndetails").text.gsub(/\n/, "").strip,
-
     }
 
     skeins << skein
     puts "Added #{skein[:name]}"
     puts " "
     
-    byebug
+    # byebug
   end
-  
-  
-end
 
+  CSV.open('tricoter.csv', 'w') do |csv|
+    csv << ["name", "image_url", "weight"]
+    skeins.each do |skein|
+    csv << [
+      skein[:name],
+      skein[:image_url],
+      skein[:price]
+    ]
+    end
+  end
+end
 scraper
  
 
 
-
-  # skein = doc.css("div.category-item")
-
-
-  # How do you address the HTTParty deprecation where they no longer skip nil? Running through this exercise on a different site and came across this problem...
-
-  # skein.each do |tile|
-  #   name = tile.css("div#product-top-details h1[title]").text
-  #   fibre = tile.css("").text
-  #   weight = tile.css("").text
-  #   gauge = tile.css("").text
-  #   price = tile.css("").text
-  #   description = tile.css("div#product-top-details div.short_description").text
-  #   image_url = tile.css("").text
-  #   brand=tile.css("").text
-
-    # output[name.to_sym] = {
-  #     fibre
-  #     weight
-  #     gauge
-  #     price 
-  #     description 
-  #     image_url 
-  #     brand
-
-  #   }
-  # end
-
-  # output
-
-# end
 
